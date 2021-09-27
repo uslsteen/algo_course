@@ -7,11 +7,11 @@ static CHUNK_SIZE : i32= 32;
 static MAX_SET_ELEM : i32 = 20000;
 
 
-fn input_i32() ->i32 {
+fn input_array() -> Vec<i32> {
     let mut input = String::new();
     io::stdin().read_line(&mut input).unwrap();
 
-    return input.trim().parse().unwrap();
+    input.split_whitespace().map(|s| s.parse().unwrap()).collect()
 }
 
 pub struct Set {
@@ -56,10 +56,9 @@ impl Set {
     pub fn dump(&mut self) {
         for elem in 0..self.m_max_elem {
             if self.contains(elem) == 1 {
-                println!("{}", elem);
+                print!("{} ", elem);
             }
         }
-        println!();
     }
 }
 
@@ -87,7 +86,8 @@ impl BitXor for Set {
 }
 
 
-pub fn construct_n_init(max_elem : i32) -> Option<Set> {
+pub fn construct_n_init(max_elem : i32, from : usize, to : usize, vec: &Vec<i32>) -> Option<Set> {
+
     let mut set  : Set = Set::new(max_elem).unwrap();
     /*
     match set {
@@ -96,12 +96,9 @@ pub fn construct_n_init(max_elem : i32) -> Option<Set> {
         },
         None => println!("Set wasn't constructed successful")
     }*/
-
-    let mut elem : i32 = input_i32();
-
-    while elem != 0 {
-        set.insert(elem);
-        elem = input_i32();
+    
+    for i in from..to {
+        set.insert(vec[i]);
     }
 
     return Some(set);
@@ -109,10 +106,22 @@ pub fn construct_n_init(max_elem : i32) -> Option<Set> {
 
 
 fn main() {
+    let data : Vec<i32> = input_array();
+    let mut index : usize = 0;
+    let mut len : usize = data.len();
+
+    for i in 0..len {
+        index = i;
+
+        if data[index] == 0 {
+            break;
+        }
+    }
+
     let max_elem: i32 = 20000;
 
-    let set1 : Set = construct_n_init(max_elem).unwrap();
-    let set2 : Set = construct_n_init(max_elem).unwrap();
+    let set1 : Set = construct_n_init(max_elem, 0, index, &data).unwrap();
+    let set2 : Set = construct_n_init(max_elem, index + 1, len - 1, &data).unwrap();
 
     let mut set_res : Set = set1^set2; 
     set_res.dump();
