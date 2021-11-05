@@ -20,33 +20,39 @@ fn input_usize() -> usize {
     return input.trim().parse().unwrap();
 }
 
-fn get_intersetct(vec1: &Vec<i32>, vec2 : &Vec<i32>, size1 : usize, size2: usize) {
+fn input_i32() -> i32 {
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).unwrap();
+
+    return input.trim().parse().unwrap();
+}
+
+fn main() {
+
+    let mut tmp : usize = 0;
+    let size1 : usize = input_usize();
+    let size2 : usize = input_usize();
+
+    let data1 : Vec<i32> = input_array(size1);
+    let mut data2_elem : i32;
 
     let mut i1 : usize = 0; 
-    let mut i2 : usize = 0;
+    let mut i2 : usize = 1;
+    data2_elem = input_i32();
 
     while i1 < size1 && i2 < size2 {
-        if vec1[i1] == vec2[i2] {
-            print!("{} ", vec1[i1]);
+
+        if data1[i1] == data2_elem {
+            print!("{} ", data1[i1]);
             i1 += 1; i2 +=1;
+            data2_elem = input_i32();
         }
-        else if vec1[i1] > vec2[i2] {
+        else if data1[i1] > data2_elem {
             i2 += 1;
+            data2_elem = input_i32();
         }
         else {
             i1 += 1;
         }
     }
-}
-
-
-fn main() {
-
-    let size1 : usize = input_usize();
-    let size2 : usize = input_usize();
-
-    let data1 : Vec<i32> = input_array(size1);
-    let data2 : Vec<i32> = input_array(size2);
-
-    get_intersetct(&data1, &data2, size1, size2);
 }
